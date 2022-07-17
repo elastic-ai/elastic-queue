@@ -16,3 +16,54 @@ Elastic Queue supports queuing of jobs with different priorities, automatic star
 - **Multi-tenant Isolation** uses namespace to achieve multi-tenancy, independent quota and resource isolation between tenants, so that different customers can share Kubernetes clusters.
 - **Multi-cloud Scaler** runs different queues to different public cloud providers, and optimizes the running cost of AI tasks using multi-cloud.
 - **Multi-framework Integration** integrates the mainstream AI computing framework, simplifies the access process and reduces customer access costs
+
+## Prerequisites
+
+- Kubernetes v1.22+
+
+## Installation
+
+1. Install Elastic Queue
+
+```
+$ kubectl apply -f https://github.com/elastic-ai/elastic-queue/releases/download/v0.1.0/manifests.yaml
+```
+
+2. Install Kubeflow training operator that supports Elastic Queue
+
+```
+$ kubectl apply -f https://github.com/elastic-ai/elastic-queue/releases/download/v0.1.0/kubeflow-training-operator-manifests.yaml
+```
+
+**Note:** Elastic Queue need job suspend which Kubeflow training operator do not yet supports. So we fork and release a supported version and has submitted the [PR](https://github.com/kubeflow/common/pull/196) to Kubeflow community. We will use community version after the PR is merged.
+
+3. The controller runs in elastic-queue namespace
+
+```
+$ kubectl get pod -nelastic-queue
+NAME                                                READY   STATUS    RESTARTS   AGE
+elastic-queue-controller-manager-58496c48b7-xrsfv   1/1     Running   0          173m
+```
+
+## Getting Started
+
+A simple example can be found in [samples](https://github.com/elastic-ai/elastic-queue/tree/master/config/samples). You can setup a ClusterQueue / Queue with:
+
+```
+$ kubectl apply -f config/samples/single-clusterqueue-setup.yaml
+```
+
+Later, you can run a tfjob with:
+
+```
+$ kubectl apply -f config/samples/sample-tfjob.yaml
+```
+
+Because Elastic Queue is based on kueue, so you also can run more samples in [kueue samples](https://github.com/kubernetes-sigs/kueue/blob/main/config/samples).
+
+## Support / Contact
+
+If you've got any questions, please feel free to contact us with following ways:
+- [open a github issue](https://github.com/elastic-ai/elastic-queue/issues/new)
+- [mailing list](mailto:elasticai@googlegroups.com) 
+- [join discussion group](https://groups.google.com/g/elasticai)
