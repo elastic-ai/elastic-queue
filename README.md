@@ -4,6 +4,8 @@
 
 *Running Your AI in a Kubernetes-Native Way.*
 
+**NOTE:** Elastic Queue is based on [kueue](https://github.com/kubernetes-sigs/kueue) with more job controllers and production support.
+
 ---
 
 Elastic Queue is a Kubernetes-native AI Workload Queue, which can make AI run in Kubernetes quickly and smoothly. 
@@ -16,3 +18,11 @@ Elastic Queue supports queuing of jobs with different priorities, automatic star
 - **Multi-tenant Isolation** uses namespace to achieve multi-tenancy, independent quota and resource isolation between tenants, so that different customers can share Kubernetes clusters.
 - **Multi-cloud Scaler** runs different queues to different public cloud providers, and optimizes the running cost of AI tasks using multi-cloud.
 - **Multi-framework Integration** integrates the mainstream AI computing framework, simplifies the access process and reduces customer access costs
+
+## Prerequisites
+
+- Kubernetes v1.22+
+
+## Installation
+
+1. Install 
