@@ -1,0 +1,12 @@
+domain: elasticai.io
+layout:
+- go.kubebuilder.io/v3
+projectName: elastic-queue
+repo: elasticai.io/elastic-queue
+resources:
+- controller: true
+  domain: elasticai.io
+  group: kubeflow.org
+  kind: TFJob
+  version: v1
+version: "3"

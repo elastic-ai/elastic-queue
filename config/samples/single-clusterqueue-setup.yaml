@@ -1,0 +1,30 @@
+apiVersion: kueue.x-k8s.io/v1alpha1
+kind: ResourceFlavor
+metadata:
+  name: default
+---
+apiVersion: kueue.x-k8s.io/v1alpha1
+kind: ClusterQueue
+metadata:
+  name: cluster-total
+spec:
+  namespaceSelector: {}
+  resources:
+  - name: "cpu"
+    flavors:
+    - name: default
+      quota:
+        min: 9
+  - name: "memory"
+    flavors:
+    - name: default
+      quota:
+        min: 36Gi
+---
+apiVersion: kueue.x-k8s.io/v1alpha1
+kind: Queue
+metadata:
+  namespace: default
+  name: main
+spec:
+  clusterQueue: cluster-total
