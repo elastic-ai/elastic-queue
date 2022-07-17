@@ -1,0 +1,19 @@
+apiVersion: "kubeflow.org/v1"
+kind: TFJob
+metadata:
+  name: tfjob-simple
+  annotations:
+    kueue.x-k8s.io/queue-name: main
+spec:
+  tfReplicaSpecs:
+    Worker:
+      replicas: 2
+      restartPolicy: OnFailure
+      template:
+        spec:
+          containers:
+            - name: tensorflow
+              image: knabben/tf-mnist-with-summaries:1.0
+              command:
+                - "python"
+                - "/var/tf_mnist/mnist_with_summaries.py"
