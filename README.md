@@ -61,6 +61,12 @@ $ kubectl apply -f config/samples/sample-tfjob.yaml
 
 Because Elastic Queue is based on kueue, so you also can run more samples in [kueue samples](https://github.com/kubernetes-sigs/kueue/blob/main/config/samples).
 
+## Roadmap
+
+- Support all Kubeflow training operator jobs (MPIJob, PytorchJob, XGBoostJob, MXJob)
+- Support job resources can scale to cloud
+- Integrate with Elastic GPU to support that the job can use gpushare resource
+
 ## Support / Contact
 
 If you've got any questions, please feel free to contact us with following ways:
