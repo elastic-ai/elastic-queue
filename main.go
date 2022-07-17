@@ -19,10 +19,10 @@ package main
 import (
 	"bytes"
 	"context"
+	"elasticai.io/elastic-queue/pkg/util/cert"
 	"flag"
 	"fmt"
 	"os"
-	"sigs.k8s.io/kueue/pkg/util/cert"
 
 	// Import all Kubernetes client auth plugins (e.g. Azure, GCP, OIDC, etc.)
 	// to ensure that exec-entrypoint and run can make use of them.

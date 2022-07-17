@@ -17,10 +17,14 @@ GIT_TAG ?= $(shell git describe --tags --dirty --always)
 IMAGE_BUILD_CMD ?= docker build
 IMAGE_PUSH_CMD ?= docker push
 IMAGE_BUILD_EXTRA_OPTS ?=
-IMAGE_REGISTRY ?= ccr.ccs.tencentyun.com/elastic-ai/
+IMAGE_REGISTRY ?= ccr.ccs.tencentyun.com/elastic-ai
 IMAGE_NAME := elastic-queue
 IMAGE_REPO ?= $(IMAGE_REGISTRY)/$(IMAGE_NAME)
 IMAGE_TAG ?= $(IMAGE_REPO):$(GIT_TAG)
+KUEUE_DIR ?= ./vendor/sigs.k8s.io/kueue
+# kubeflow training-operator for elastic-queue version
+TRAINING_OPERATOR_DIR ?= ./config/kubeflow/trainingoperator
+TRAINING_OPERATOR_IMG ?= $(IMAGE_REGISTRY)/training-operator
 
 ifdef EXTRA_TAG
 IMAGE_EXTRA_TAG ?= $(IMAGE_REPO):$(EXTRA_TAG)
@@ -80,11 +84,11 @@ help: ## Display this help.
 
 .PHONY: manifests
 manifests: controller-gen ## Generate WebhookConfiguration, ClusterRole and CustomResourceDefinition objects.
-	$(CONTROLLER_GEN) rbac:roleName=manager-role crd webhook paths="./..." output:crd:artifacts:config=config/crd/bases
+	$(CONTROLLER_GEN) rbac:roleName=manager-role crd webhook paths="./$(KUEUE_DIR)/..." output:crd:artifacts:config=config/crd/bases
 
 .PHONY: generate
 generate: controller-gen ## Generate code containing DeepCopy, DeepCopyInto, and DeepCopyObject method implementations.
-	$(CONTROLLER_GEN) object:headerFile="hack/boilerplate.go.txt" paths="./..."
+	$(CONTROLLER_GEN) object:headerFile="hack/boilerplate.go.txt" paths="./$(KUEUE_DIR)/..."
 
 .PHONY: fmt
 fmt: ## Run go fmt against code.
@@ -181,6 +185,9 @@ artifacts: kustomize
 	if [ -d artifacts ]; then rm -rf artifacts; fi
 	@mkdir -p artifacts
 	$(KUSTOMIZE) build config/default -o artifacts/manifests.yaml
+	## Release kubeflow trainnig-operator for elastic-queue version
+	cd $(TRAINING_OPERATOR_DIR)/overlays/standalone && $(KUSTOMIZE) edit set image kubeflow/training-operator=${TRAINING_OPERATOR_IMG}
+	$(KUSTOMIZE) build $(TRAINING_OPERATOR_DIR)/overlays/standalone -o artifacts/kubeflow-training-operator-manifests.yaml
 
 ##@ Tools
 PROJECT_DIR := $(shell dirname $(abspath $(lastword $(MAKEFILE_LIST))))

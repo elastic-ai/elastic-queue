@@ -151,10 +151,8 @@ func (r *TFJobReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl
 		return ctrl.Result{}, err
 	}
 
-	log.Info("list childWorkloads", "childWorkloads", childWorkloads)
 	// 1. make sure there is only a single existing instance of the workload
 	wl, err := r.ensureAtMostOneWorkload(ctx, &job, childWorkloads)
-	log.Info("ensure one workload", "workload", wl)
 	if err != nil {
 		log.Error(err, "Getting existing workloads")
 		return ctrl.Result{}, err
