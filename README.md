@@ -61,6 +61,40 @@ $ kubectl apply -f config/samples/sample-tfjob.yaml
 
 Because Elastic Queue is based on kueue, so you also can run more samples in [kueue samples](https://github.com/kubernetes-sigs/kueue/blob/main/config/samples).
 
+## Arena Support
+
+Arena is a command-line interface to submit and manage kubeflow jobs. Now you can use it to submit tfjob with Elastic Queue support.
+
+```
+$ arena submit tfjob --name=tfjob-simple --image="knabben/tf-mnist-with-summaries:1.0" --queue="main" "'python /var/tf_mnist/mnist_with_summaries.py'"
+$ arena list
+NAME            STATUS     TRAINER  DURATION  GPU(Requested)  GPU(Allocated)  QUEUE  NODE
+tfjob-simple    SUCCEEDED  TFJOB    57s       0               N/A             main   N/A
+$ arena 
+Name:      tfjob-simple
+Status:    SUCCEEDED
+Namespace: default
+Queue:     main
+Priority:  N/A
+Trainer:   TFJOB
+Duration:  57s
+
+Instances:
+  NAME                    STATUS     AGE  IS_CHIEF  GPU(Requested)  QUEUE  NODE
+  ----                    ------     ---  --------  --------------  ----
+  tfjob-simple-chief-0    Completed  57s  false     0               main  172.16.0.136
+```
+
+### Installation
+
+You can find the supported arena release in [arena-queue](https://github.com/elastic-ai/arena/releases/download/v0.9.0-queue/arena-v0.9.0-queue.tgz).
+
+```
+$ wget https://github.com/elastic-ai/arena/releases/download/v0.9.0-queue/arena-v0.9.0-queue.tgz
+$ tar zxvf arena-v0.9.0-queue.tgz -C /usr/bin
+$ arena list
+```
+
 ## Roadmap
 
 - Support all Kubeflow training operator jobs (MPIJob, PytorchJob, XGBoostJob, MXJob)
